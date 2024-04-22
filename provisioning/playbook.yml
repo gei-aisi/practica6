@@ -57,7 +57,7 @@
 
   tasks:
     - name: Update package cache
-      apt:
+      ansible.builtin.apt:
         update_cache: yes
       
     - name: Install basic software
