@@ -4,14 +4,14 @@
 
   tasks:
   - name: Update Package Cache
-    apt:
+    ansible.builtin.apt:
       update_cache: yes
 
 - name: NFS common config
-  import_playbook: playbooks/nfs-common.yml
+  ansible.builtin.import_playbook: playbooks/nfs-common.yml
 
 - name: Setup NFS server
-  import_playbook: playbooks/nfs-server.yml
+  ansible.builtin.import_playbook: playbooks/nfs-server.yml
 
 - name: Setup NFS clients
-  import_playbook: playbooks/nfs-client.yml
+  ansible.builtin.import_playbook: playbooks/nfs-client.yml

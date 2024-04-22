@@ -6,13 +6,16 @@
     - vars/main.yml
 
   tasks:
-    - name: Add group "hadoop"
-      group: name=hadoop
+    - name: Add group hadoop
+      xxx:
+        name:
+        system:
+        state:
 
-    - name: Add user "hadoop"
-      user:
-        name: 
-        group: 
+    - name: Add user hadoop
+      xxx:
+        name:
+        group:
         home:
         createhome:
         password:
@@ -20,10 +23,11 @@
         generate_ssh_key:
         ssh_key_bits:
         ssh_key_type:
+        state:
         force: yes
 
     - name: Add env vars to .profile
-      blockinfile:
+      ansible.builtin.blockinfile:
         dest: /home/hadoop/.profile
         marker: "# {mark} Added env vars for Hadoop"
         block: |
@@ -33,15 +37,16 @@
           export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin
           export JAVA_HOME={{ java_home }}
         backup: yes
+        state: present
 
     - name: Copy SSH key
-      copy:
+      ansible.builtin.copy:
         src: /home/hadoop/.ssh/id_rsa.pub
         dest: /tmp/id_rsa.pub
         remote_src: yes
 
     - name: Set authorized key for hadoop user
-      authorized_key:
+      ansible.builtin.authorized_key:
         user: hadoop
         state: present
         key: "{{ item }}"
@@ -49,7 +54,7 @@
         - /tmp/id_rsa.pub
 
     - name: Remove SSH keys
-      file:
+      ansible.builtin.file:
         path: "{{ item }}"
         state: absent
       loop:

@@ -20,7 +20,7 @@ download_dir: /tmp
 hadoop_dir: /share/nfs/hadoop
 
 # Hadoop version
-hadoop_version: 3.3.4
+hadoop_version: 3.3.6
 
 # URL for downloading Hadoop distribution
 hadoop_url: "https://ftp.cixug.es/apache/hadoop/common/hadoop-{{ hadoop_version }}/hadoop-{{ hadoop_version }}.tar.gz"
@@ -29,7 +29,13 @@ hadoop_url: "https://ftp.cixug.es/apache/hadoop/common/hadoop-{{ hadoop_version 
 hadoop_conf_dir: "{{ hadoop_dir }}/hadoop-{{ hadoop_version }}/etc/hadoop"
 
 # JAVA_HOME
-java_home: /usr/lib/jvm/java-1.11.0-openjdk-amd64
+java_home: /usr/lib/jvm/temurin-11-jdk-amd64
+
+java_repo_url: https://packages.adoptium.net/artifactory/deb
+
+java_repo_key_url: https://packages.adoptium.net/artifactory/api/gpg/key/public
+
+java_repo_key: /etc/apt/trusted.gpg.d/adoptium.gpg
 
 # The directory into which spark will stored its data
 spark_data_dir: spark-data
@@ -38,7 +44,7 @@ spark_data_dir: spark-data
 spark_dir: /share/nfs/spark
 
 # Spark version
-spark_version: 3.3.2
+spark_version: 3.5.1
 
 # URL for downloading Spark distribution
 spark_url: "https://ftp.cixug.es/apache/spark/spark-{{ spark_version }}/spark-{{ spark_version }}-bin-hadoop3.tgz"

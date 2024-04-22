@@ -1,7 +1,23 @@
 ---
-- hosts: cluster
+- hosts: xxx
   become: yes
 
+  vars_files:
+    - vars/main.yml
+    
   tasks:
-    - name: Install JDK 11
-      package: name=openjdk-11-jdk state=latest
+     - name: Add an apt signing key
+       xxx:
+         url:
+         state:
+         keyring:
+
+     - name: Add apt repository for Temurin JDK
+       xxx:
+         repo:
+         state:
+        
+     - name: Install JDK 11
+       package:
+         name: temurin-11-jdk
+         state: latest

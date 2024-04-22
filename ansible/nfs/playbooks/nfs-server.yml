@@ -11,20 +11,24 @@
         
   tasks:
     - name: Install NFS server packages
-      package:
+      ansible.builtin.package:
         name: "{{ list_of_packages }}"
         state: latest
  
     - name: Ensure NFS server is started and enabled at boot
-      service: name=nfs-kernel-server state=started enabled=yes
+      ansible.builtin.service:
+        name: nfs-kernel-server
+        state: started
+        enabled: yes
   
     - name: Copy exports.j2 template to /etc/exports
-      template:
-        src: 
-        dest: 
+      xxx:
+        src:
+        dest:
       notify:
-
         
   handlers:
     - name: Restart NFS server
-      service: name=nfs-kernel-server state=restarted
+      ansible.builtin.service:
+        name: nfs-kernel-server
+        state: restarted

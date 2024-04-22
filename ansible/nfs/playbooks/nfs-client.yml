@@ -7,7 +7,7 @@
 
   tasks: 
     - name: Mount NFS share
-      mount:
+      xxx:
         fstype:
         path:
         src:

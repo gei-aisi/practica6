@@ -54,7 +54,7 @@ if [[ "$HOSTNAME" == *"-master" ]]; then
 	WORKERS_FILE=/vagrant/ansible/hadoop/playbooks/templates/workers
 	rm $WORKERS_FILE >& /dev/null
 	for (( i=1; i<=$NUM_WORKERS; i++ )); do
-	    echo "$WORKER_HOSTNAME-$i" >> $WORKERS_FILE
+	    echo "${WORKER_HOSTNAME}${i}" >> $WORKERS_FILE
 	done
 
 	mkdir -p /etc/ansible
@@ -86,4 +86,3 @@ sed -i "/-aisi/d" $USER_DIR/authorized_keys >& /dev/null
 cat $SSH_PUBLIC_KEY >> $USER_DIR/authorized_keys
 chown vagrant:vagrant $USER_DIR/authorized_keys
 chmod 0600 $USER_DIR/authorized_keys
-

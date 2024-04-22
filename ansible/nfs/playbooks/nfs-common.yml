@@ -11,14 +11,14 @@
         
   tasks:
     - name: Install common NFS packages
-      package:
+      ansible.builtin.package:
         name: "{{ list_of_packages }}"
         state: latest
 
     - name: Create NFS directory
-      file:
+      xxx:
         path:
-        state: 
-        owner: 
-        group: 
+        state:
+        owner:
+        group:
         mode:
