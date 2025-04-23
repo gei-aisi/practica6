@@ -1,8 +1,8 @@
 [masters]
-xxx2324-master
+X-master
 [workers]
-xxx2324-worker1
-xxx2324-worker2
+X-worker1
+X-worker2
 # Group 'cluster' with all nodes
 [cluster:children]
 masters

@@ -8,15 +8,16 @@
   vars:
     list_of_packages:
       - nfs-common
-        
+      - libnfs-utils
+
   tasks:
     - name: Install common NFS packages
-      ansible.builtin.package:
-        name: "{{ list_of_packages }}"
-        state: latest
+      ansible.builtin.xxx:
+        name:
+        state:
 
     - name: Create NFS directory
-      xxx:
+      ansible.builtin.xxx:
         path:
         state:
         owner:

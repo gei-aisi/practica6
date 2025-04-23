@@ -14,16 +14,16 @@
         group: hadoop
 
     - name: Download Hadoop package
-      xxx:
+      ansible.builtin.xxx:
         url:
         dest: "xxx/hadoop.tar.gz"
         owner:
         group:
         force: false
-        checksum: md5:1cbe1214299cd3bd282d33d3934b5cbd
+        checksum: "{{ hadoop_checksum }}"
 
     - name: Untar Hadoop package
-      xxx:
+      ansible.builtin.xxx:
         src:
         dest:
         creates: "{{ hadoop_dir }}/hadoop-{{ hadoop_version }}"
@@ -31,8 +31,8 @@
         group:
         mode: "0755"
 
-    - name: Copy Hadoop configuration using loop
-      xxx:
+    - name: Copy Hadoop configuration using a loop
+      ansible.builtin.xxx:
         src: "templates/{{ item }}"
         dest:
         owner:

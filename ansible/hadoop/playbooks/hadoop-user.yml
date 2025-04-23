@@ -7,17 +7,17 @@
 
   tasks:
     - name: Add group hadoop
-      xxx:
+      ansible.builtin.xxx:
         name:
         system:
         state:
 
     - name: Add user hadoop
-      xxx:
+      ansible.builtin.xxx:
         name:
         group:
         home:
-        createhome:
+        createhome: yes
         password:
         shell:
         generate_ssh_key:

@@ -3,9 +3,9 @@
   become: yes
 
   tasks:
-  - name: Update Package Cache
-    ansible.builtin.apt:
-      update_cache: yes
+    - name: Update Package Cache
+      ansible.builtin.apt:
+        update_cache: yes
 
 - name: NFS common config
   ansible.builtin.import_playbook: playbooks/nfs-common.yml

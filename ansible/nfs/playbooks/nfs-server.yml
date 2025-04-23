@@ -22,7 +22,7 @@
         enabled: yes
   
     - name: Copy exports.j2 template to /etc/exports
-      xxx:
+      ansible.builtin.xxx:
         src:
         dest:
       notify:

@@ -20,7 +20,7 @@
         owner: hadoop
         group: hadoop
         force: false
-        checksum: md5:551e8baa422bac88e9cdcca7021d58d6
+        checksum: "{{ spark_checksum }}"
 
     - name: Untar Spark package
       ansible.builtin.unarchive:

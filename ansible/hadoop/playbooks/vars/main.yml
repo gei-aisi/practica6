@@ -20,10 +20,12 @@ download_dir: /tmp
 hadoop_dir: /share/nfs/hadoop
 
 # Hadoop version
-hadoop_version: 3.3.6
+hadoop_version: 3.4.1
 
 # URL for downloading Hadoop distribution
-hadoop_url: "https://ftp.cixug.es/apache/hadoop/common/hadoop-{{ hadoop_version }}/hadoop-{{ hadoop_version }}.tar.gz"
+hadoop_url: "https://ftp.cixug.es/apache/hadoop/common/hadoop-{{ hadoop_version }}/hadoop-{{ hadoop_version }}-lean.tar.gz"
+
+hadoop_checksum: sha512:822cb1531333847e740d942cacf24295a588255786afe11f11c8ff9695be1caae425ddbafd4fda8b0f1fce88336efa05f16d5425659ab225075864ab6b8702bf
 
 # Hadoop configuration directory
 hadoop_conf_dir: "{{ hadoop_dir }}/hadoop-{{ hadoop_version }}/etc/hadoop"
@@ -44,10 +46,12 @@ spark_data_dir: spark-data
 spark_dir: /share/nfs/spark
 
 # Spark version
-spark_version: 3.5.1
+spark_version: 3.5.5
 
 # URL for downloading Spark distribution
 spark_url: "https://ftp.cixug.es/apache/spark/spark-{{ spark_version }}/spark-{{ spark_version }}-bin-hadoop3.tgz"
+
+spark_checksum: sha512:ec5ff678136b1ff981e396d1f7b5dfbf399439c5cb853917e8c954723194857607494a89b7e205fce988ec48b1590b5caeae3b18e1b5db1370c0522b256ff376
 
 # Spark home
 spark_home: "{{ spark_dir }}/spark-{{ spark_version }}-bin-hadoop3"

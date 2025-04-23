@@ -41,8 +41,16 @@ if ! grep -Fq /dev/sdc /etc/fstab ; then
     echo -e "/dev/sdc        /data/disk1     ext4    defaults,relatime       0       0" >> /etc/fstab
 fi
 
+passwd -d root
+echo 'root:vagrant' | chpasswd -m
+passwd -d vagrant
+echo 'vagrant:vagrant' | chpasswd -m
+
 # SSH config
 sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
+sed -i 's/#PasswordAuthentication/PasswordAuthentication/' /etc/ssh/sshd_config
+sed -i 's/KbdInteractiveAuthentication no/KbdInteractiveAuthentication yes/' /etc/ssh/sshd_config
+sed -i 's/#KbdInteractiveAuthentication/KbdInteractiveAuthentication/' /etc/ssh/sshd_config
 sed -i '/127.0.1.1/d' /etc/hosts >& /dev/null
 systemctl restart sshd
 
@@ -59,7 +67,7 @@ if [[ "$HOSTNAME" == *"-master" ]]; then
 
 	mkdir -p /etc/ansible
 	cp /vagrant/ansible.inventory /etc/ansible/hosts
-	cp /vagrant/provisioning/ansible.cfg /etc/ansible
+	cp /vagrant/ansible.cfg /etc/ansible
 	chmod 0644 /etc/ansible/hosts
 	chmod 0644 /etc/ansible/ansible.cfg
 
