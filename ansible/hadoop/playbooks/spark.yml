@@ -51,19 +51,15 @@
         backup: yes
         state: present
 
-    - name: Copy Spark WordCount
+    - name: Copy Python scripts
       ansible.builtin.copy:
-        src: /vagrant/scripts/spark_wordcount.py
+        src: "files/{{ item }}"
         dest: "{{ download_dir }}"
         owner: hadoop
         group: hadoop
-
-    - name: Copy WordSearch
-      ansible.builtin.copy:
-        src: /vagrant/scripts/wordsearch.py
-        dest: "{{ download_dir }}"
-        owner: hadoop
-        group: hadoop
+      loop:
+        - spark_wordcount.py
+        - wordsearch.py
 
 - hosts: cluster
   become: yes
