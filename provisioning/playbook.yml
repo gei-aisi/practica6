@@ -21,7 +21,7 @@
       ansible.builtin.lineinfile:
         path: /vagrant/ansible/nfs/playbooks/vars/main.yml
         regexp: '^cluster_network:'
-        line: 'cluster_network: {{ master_ip }}/24'
+        line: "cluster_network: {{ (master_ip + '/24') | ansible.utils.ipaddr('network/prefix') }}"
         backrefs: yes
 
     - name: Set worker_cores variable
@@ -37,13 +37,36 @@
         regexp: '^num_workers:'
         line: 'num_workers: {{ num_workers }}'
         backrefs: yes
-        
+
+    - name: Generate workers file
+      ansible.builtin.copy:
+        dest: /vagrant/ansible/hadoop/playbooks/templates/workers
+        content: |
+          # Fichero generado automáticamente
+          {% for host in groups['workers'] %}
+          {{ host }}
+          {% endfor %}
+
+    - name: Install Python packages
+      ansible.builtin.package:
+        name:
+          - python3-pip
+          - python3-matplotlib
+          - python3-pandas
+        state: present
+        update_cache: yes
+
+    - name: Install Parquet engine
+      ansible.builtin.pip:
+        name: pyarrow
+        executable: pip3
+        extra_args: --break-system-packages
+
 - hosts: cluster
   become: yes
 
   vars:
     list_of_packages: 
-      - ntp
       - vim
       - nano
       - curl
@@ -55,12 +78,9 @@
       - gnupg
       - whois
 
-  tasks:
-    - name: Update package cache
-      ansible.builtin.apt:
-        update_cache: yes
-      
+  tasks:      
     - name: Install basic software
       ansible.builtin.package:
         name: "{{ list_of_packages }}"
-        state: latest
+        state: present
+        update_cache: yes

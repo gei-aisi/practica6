@@ -1,60 +1,57 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 require_relative 'provisioning/vbox.rb'
-VBoxUtils.check_version('7.1.6')
-Vagrant.require_version ">= 2.4.3"
+VBoxUtils.check_version('7.2.4')
+Vagrant.require_version ">= 2.4.9"
 
 STUDEN_PREFIX = "X"
+BOX_NAME = "Y"
+
 # Hostnames for master and worker nodes
 MASTER_HOSTNAME = "#{STUDEN_PREFIX}-master"
 WORKER_HOSTNAME = "#{STUDEN_PREFIX}-worker"
 
-# Master settings
-MASTER_IP = "10.10.1.10"
+# Cluster settings
+MASTER_IP = "192.168.56.10"
+NUM_WORKERS = 3
 MASTER_CORES = 1
-MASTER_MEM = 2048
-
-# Worker settings
-NUM_WORKERS = 2
-WORKER_CORES = 2
-WORKER_MEM = 2048
+WORKER_CORES = 1
+MASTER_MEMORY = 2048
+WORKER_MEMORY = 2048
+MASTER_NUM_DISKS=3
+MASTER_DISK_SIZE='10GB'
+WORKER_NUM_DISKS=3
+WORKER_DISK_SIZE='20GB'
 
 require 'ipaddr'
 CLUSTER_IP_ADDR = IPAddr.new MASTER_IP
-CLUSTER_IP_ADDR = CLUSTER_IP_ADDR.succ
+CLUSTER_DOMAIN = "cluster.local"
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "debian/bookworm64"
-  config.vm.box_version = "12.20250126.1"
+  config.vm.box = BOX_NAME
   config.vm.box_check_update = false
-  config.vm.synced_folder ".", "/vagrant", type: "virtualbox"
 
-  # Configure hostmanager and vbguest plugins
+  # Configure hostmanager plugin
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true
   config.hostmanager.manage_guest = true
-  config.vbguest.auto_update = false
 
   # Master node
   config.vm.define "master", primary: true do |master|
     master.vm.hostname = MASTER_HOSTNAME
-    master.vm.network "private_network", ip: MASTER_IP, virtualbox__intnet: "hadoop"
-    master.vm.network "forwarded_port", guest: 9870, host: 9870
+    master.vm.network "private_network", ip: MASTER_IP
+    master.hostmanager.aliases = ["#{MASTER_HOSTNAME}.#{CLUSTER_DOMAIN}"]
 
-    master.vm.provider "virtualbox" do |prov|
-        prov.name = "AISI-P6-#{master.vm.hostname}"
-        prov.cpus = MASTER_CORES
-        prov.memory = MASTER_MEM
-        prov.gui = false
-
-	# Add disks
-        for i in 0..1 do
-            disk = "./disks/#{master.vm.hostname}-disk#{i}.vdi"
-            unless File.exist?(disk)
-                prov.customize ["createmedium", "disk", "--filename", disk, "--format", "VDI", "--size", 20 * 1024]
-            end
-	    prov.customize ["storageattach", :id, "--storagectl", "SATA Controller", "--port", i + 1, "--device", 0, "--type", "hdd", "--medium", disk]
-        end
+    for i in 1..MASTER_NUM_DISKS do
+        master.vm.disk :disk, size: MASTER_DISK_SIZE, primary: false, name: "disk#{i}"
+    end
+    
+    master.vm.provider "virtualbox" do |vb|
+        vb.name = "AISI-P6-#{master.vm.hostname}"
+        vb.cpus = MASTER_CORES
+        vb.memory = MASTER_MEMORY
+        vb.gui = false
+        vb.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
     end
 
     # Install ansible on the master node
@@ -76,31 +73,28 @@ Vagrant.configure("2") do |config|
   # Worker nodes
   (1..NUM_WORKERS).each do |i|
     config.vm.define "worker#{i}" do |worker|
-	worker.vm.hostname = "#{WORKER_HOSTNAME}#{i}"
-	IP_ADDR = CLUSTER_IP_ADDR.to_s
-        CLUSTER_IP_ADDR = CLUSTER_IP_ADDR.succ
-        worker.vm.network "private_network", ip: IP_ADDR, virtualbox__intnet: "hadoop"
+      current_worker_hostname = "#{WORKER_HOSTNAME}#{i}"
+      worker.vm.hostname = current_worker_hostname
+      CLUSTER_IP_ADDR = CLUSTER_IP_ADDR.succ
+      worker.vm.network "private_network", ip: CLUSTER_IP_ADDR.to_s
+      worker.hostmanager.aliases = ["#{current_worker_hostname}.#{CLUSTER_DOMAIN}"]
+      
+      for i in 1..WORKER_NUM_DISKS do
+            worker.vm.disk :disk, size: WORKER_DISK_SIZE, primary: false, name: "disk#{i}"
+      end
         
-        worker.vm.provider "virtualbox" do |prov|
-	    prov.name = "AISI-P6-#{worker.vm.hostname}"
-            prov.cpus = WORKER_CORES
-            prov.memory = WORKER_MEM
-	    prov.gui = false
-
-	    # Add disks
-            for j in 0..1 do
-                disk = "./disks/#{worker.vm.hostname}-disk#{j}.vdi"
-                unless File.exist?(disk)
-                    prov.customize ["createmedium", "disk", "--filename", disk, "--format", "VDI", "--size", 20 * 1024]
-                end
-		prov.customize ["storageattach", :id, "--storagectl", "SATA Controller", "--port", j + 1, "--device", 0, "--type", "hdd", "--medium", disk]
-            end
-        end
+      worker.vm.provider "virtualbox" do |vb|
+	      vb.name = "AISI-P6-#{worker.vm.hostname}"
+        vb.cpus = WORKER_CORES
+        vb.memory = WORKER_MEMORY
+	      vb.gui = false
+	      vb.customize ["modifyvm", :id, "--graphicscontroller", "vmsvga"]
+      end
     end
   end
   
   # Global provisioning bash script
-  config.vm.provision "global", type: "shell", run: "once", path: "provisioning/bootstrap.sh"  do |script|
-      script.args = [NUM_WORKERS, WORKER_HOSTNAME]
+  config.vm.provision "global", type: "shell", run: "always", path: "provisioning/bootstrap.sh"  do |script|
+      script.args = [MASTER_HOSTNAME]
   end
 end

@@ -1,5 +1,5 @@
 ---
-- hosts: xxx
+- hosts: XXX
   become: yes
 
   vars_files:
@@ -7,7 +7,7 @@
 
   tasks: 
     - name: Mount NFS share
-      ansible.builtin.xxx:
+      ansible.builtin.XXX:
         fstype:
         path:
         src:

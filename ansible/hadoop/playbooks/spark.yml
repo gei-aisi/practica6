@@ -51,3 +51,30 @@
         backup: yes
         state: present
 
+    - name: Copy Spark WordCount
+      ansible.builtin.copy:
+        src: /vagrant/scripts/spark_wordcount.py
+        dest: "{{ download_dir }}"
+        owner: hadoop
+        group: hadoop
+
+    - name: Copy WordSearch
+      ansible.builtin.copy:
+        src: /vagrant/scripts/wordsearch.py
+        dest: "{{ download_dir }}"
+        owner: hadoop
+        group: hadoop
+
+- hosts: cluster
+  become: yes
+
+  vars_files:
+    - vars/main.yml
+
+  tasks:
+    - name: Create dir for Spark data
+      ansible.builtin.file:
+        path: "/data/disk0/{{ spark_data_dir }}"
+        state: directory
+        owner: hadoop
+        group: hadoop

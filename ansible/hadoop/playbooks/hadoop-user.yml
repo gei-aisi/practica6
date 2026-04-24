@@ -1,5 +1,5 @@
 --- 
-- hosts: xxx
+- hosts: XXX
   become: yes
 
   vars_files:
@@ -7,23 +7,23 @@
 
   tasks:
     - name: Add group hadoop
-      ansible.builtin.xxx:
+      ansible.builtin.XXX:
         name:
         system:
         state:
 
     - name: Add user hadoop
-      ansible.builtin.xxx:
+      ansible.builtin.XXX:
         name:
         group:
+        state:
         home:
         createhome: yes
-        password:
         shell:
+        password:
         generate_ssh_key:
         ssh_key_bits:
         ssh_key_type:
-        state:
         force: yes
 
     - name: Add env vars to .profile
@@ -31,7 +31,7 @@
         dest: /home/hadoop/.profile
         marker: "# {mark} Added env vars for Hadoop"
         block: |
-          export HADOOP_HOME={{ hadoop_dir }}/hadoop-{{ hadoop_version }}
+          export HADOOP_HOME={{ hadoop_home }}
           export HADOOP_MAPRED_HOME=$HADOOP_HOME
           export HADOOP_CONF_DIR={{ hadoop_conf_dir }}
           export PATH=$PATH:$HADOOP_HOME/bin:$HADOOP_HOME/sbin

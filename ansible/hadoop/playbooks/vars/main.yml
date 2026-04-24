@@ -7,51 +7,47 @@ master_hostname: xxx
 worker_cores: xxx
 num_workers: xxx
 
-# The directory into which Hadoop will stored its data
+# JAVA_HOME
+java_home: /usr/lib/jvm/java-21-openjdk-amd64
+
+# The directory into which Hadoop and Spark distributions will be download
+download_dir: /share/nfs
+
+# Hadoop version to download
+hadoop_version: 3.5.0
+
+# URL for downloading the Hadoop distribution
+hadoop_url: "https://dlcdn.apache.org/hadoop/common/hadoop-{{ hadoop_version }}/hadoop-{{ hadoop_version }}.tar.gz"
+
+# Checksum for the Hadoop distribution
+hadoop_checksum: sha512:04ab94496cc00c8b7a28d03f6308eff8d2a4e7f37a9da5e8e086e4d6fc990e7a94d661908f6a6136039536efb362614b8aecdef185b5fb8ed588f0b152c7aa16
+
+# The directory into which Hadoop will be installed on the master node
+hadoop_dir: "{{ download_dir }}/hadoop"
+
+# Hadoop home
+hadoop_home: "{{ hadoop_dir }}/hadoop-{{ hadoop_version }}"
+
+# Hadoop configuration directory
+hadoop_conf_dir: "{{ hadoop_home }}/etc/hadoop"
+
+# The directory into which Hadoop will store its data
 hadoop_data_dir: hadoop-data
 
 # Encrypted password for hadoop user
 hadoop_user_passwd: $y$j9T$gUSfSDnzBPbSlUuraKs6U/$LjnAbHUs1yIj7EMCFzNgmF2DBQDA6BK04pq2o0YK1e/
 
-# The directory into which Hadoop will be downloaded
-download_dir: /tmp
+# Spark version to download
+spark_version: 4.1.1
 
-# The directory into which Hadoop will be installed on the master node
-hadoop_dir: /share/nfs/hadoop
+# URL for downloading the Spark distribution
+spark_url: "https://dlcdn.apache.org/spark/spark-{{ spark_version }}/spark-{{ spark_version }}-bin-hadoop3.tgz"
 
-# Hadoop version
-hadoop_version: 3.4.1
-
-# URL for downloading Hadoop distribution
-hadoop_url: "https://ftp.cixug.es/apache/hadoop/common/hadoop-{{ hadoop_version }}/hadoop-{{ hadoop_version }}-lean.tar.gz"
-
-hadoop_checksum: sha512:822cb1531333847e740d942cacf24295a588255786afe11f11c8ff9695be1caae425ddbafd4fda8b0f1fce88336efa05f16d5425659ab225075864ab6b8702bf
-
-# Hadoop configuration directory
-hadoop_conf_dir: "{{ hadoop_dir }}/hadoop-{{ hadoop_version }}/etc/hadoop"
-
-# JAVA_HOME
-java_home: /usr/lib/jvm/temurin-11-jdk-amd64
-
-java_repo_url: https://packages.adoptium.net/artifactory/deb
-
-java_repo_key_url: https://packages.adoptium.net/artifactory/api/gpg/key/public
-
-java_repo_key: /etc/apt/trusted.gpg.d/adoptium.gpg
-
-# The directory into which spark will stored its data
-spark_data_dir: spark-data
+# Checksum for the Spark distribution
+spark_checksum: sha512:9f39e588e7d4c70ec0126109679f386eb9bfa26979dc42669fe4f3e3446a082dca8ffbf5e8dbe8ad411cf2ce5bf803ce670341620bf52d968067acf86626106e
 
 # The directory into which Spark will be installed on the master node
-spark_dir: /share/nfs/spark
-
-# Spark version
-spark_version: 3.5.5
-
-# URL for downloading Spark distribution
-spark_url: "https://ftp.cixug.es/apache/spark/spark-{{ spark_version }}/spark-{{ spark_version }}-bin-hadoop3.tgz"
-
-spark_checksum: sha512:ec5ff678136b1ff981e396d1f7b5dfbf399439c5cb853917e8c954723194857607494a89b7e205fce988ec48b1590b5caeae3b18e1b5db1370c0522b256ff376
+spark_dir: "{{ download_dir }}/spark"
 
 # Spark home
 spark_home: "{{ spark_dir }}/spark-{{ spark_version }}-bin-hadoop3"
@@ -59,3 +55,5 @@ spark_home: "{{ spark_dir }}/spark-{{ spark_version }}-bin-hadoop3"
 # Spark configuration directory
 spark_conf_dir: "{{ spark_home }}/conf"
 
+# The directory into which spark will store its data
+spark_data_dir: spark-data

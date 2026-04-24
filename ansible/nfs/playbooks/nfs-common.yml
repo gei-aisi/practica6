@@ -1,5 +1,5 @@
 ---
-- hosts: xxx
+- hosts: XXX
   become: yes
 
   vars_files:
@@ -12,12 +12,12 @@
 
   tasks:
     - name: Install common NFS packages
-      ansible.builtin.xxx:
+      ansible.builtin.XXX:
         name:
         state:
 
     - name: Create NFS directory
-      ansible.builtin.xxx:
+      ansible.builtin.XXX:
         path:
         state:
         owner:

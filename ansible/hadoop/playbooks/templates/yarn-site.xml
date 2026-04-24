@@ -21,7 +21,7 @@
   </property>
   <property>
     <name>yarn.nodemanager.local-dirs</name>
-    <value>/data/disk0/{{ hadoop_data_dir }}/yarn,/data/disk1/{{ hadoop_data_dir }}/yarn</value>
+    <value>/data/disk0/{{ hadoop_data_dir }}/yarn,/data/disk1/{{ hadoop_data_dir }}/yarn,/data/disk2/{{ hadoop_data_dir }}/yarn</value>
   </property>
   <property>
     <name>yarn.scheduler.minimum-allocation-mb</name>

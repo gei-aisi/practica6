@@ -3,6 +3,7 @@ X-master
 [workers]
 X-worker1
 X-worker2
+X-worker3
 # Group 'cluster' with all nodes
 [cluster:children]
 masters

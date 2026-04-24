@@ -1,5 +1,5 @@
 --- 
-- hosts: xxx
+- hosts: XXX
   become: yes
 
   vars_files:
@@ -14,17 +14,17 @@
         group: hadoop
 
     - name: Download Hadoop package
-      ansible.builtin.xxx:
+      ansible.builtin.XXX:
         url:
-        dest: "xxx/hadoop.tar.gz"
+        dest: "XXX/hadoop.tar.gz"
         owner:
         group:
         force: false
         checksum: "{{ hadoop_checksum }}"
 
     - name: Untar Hadoop package
-      ansible.builtin.xxx:
-        src:
+      ansible.builtin.XXX:
+        src: "XXX/hadoop.tar.gz"
         dest:
         creates: "{{ hadoop_dir }}/hadoop-{{ hadoop_version }}"
         owner:
@@ -32,7 +32,7 @@
         mode: "0755"
 
     - name: Copy Hadoop configuration using a loop
-      ansible.builtin.xxx:
+      ansible.builtin.XXX:
         src: "templates/{{ item }}"
         dest:
         owner:
