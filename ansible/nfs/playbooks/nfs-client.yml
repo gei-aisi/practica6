@@ -7,7 +7,7 @@
 
   tasks: 
     - name: Mount NFS share
-      ansible.builtin.XXX:
+      ansible.posix.XXX:
         fstype:
         path:
         src:
